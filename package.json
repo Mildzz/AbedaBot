@@ -1,0 +1,17 @@
+{
+  "name": "abedabot",
+  "version": "1.0.0",
+  "description": "AbedaBot.. the bot for Abeda..",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Isaiah Swaim",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "discord.js": "^13.2.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^6.0.12"
+  }
+}
