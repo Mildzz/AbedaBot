@@ -9,9 +9,8 @@ AbedaBot is a bot that allows you to fully customize and bring a spark of color 
 4.  Open the **.env** file.
 5.  Enter the necessary information.
 6.  Invite your bot via the invite link via the **OAuth2** tab.
-7.  Install the necessary packages using `npm i`
-8. Run `node .` in a command prompt to start the bot.
-9. If you run into any errors, open a comment in the GitHub **[Issues](https://github.com/Mildzz/AbedaBot/issues)** tab.
+7. Run `node .` in a command prompt to start the bot.
+8. If you run into any errors, open a comment in the GitHub **[Issues](https://github.com/Mildzz/AbedaBot/issues)** tab.
 
 ### AbedaBot is constantly being worked on so many features are coming in the future!
 

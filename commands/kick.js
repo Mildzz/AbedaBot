@@ -26,9 +26,8 @@ module.exports = {
       .prepare(`SELECT logChannelId FROM guilds WHERE guildId = '${guildId}'`)
       .pluck()
       .get();
-    const logChannelId = logChannel.toString().replace(/[^a-zA-Z0-9 ]/g, "");
 
-    interaction.guild.members.cache.get(user.id).ban({ days: 1, reason: reason })
+    // interaction.guild.members.cache.get(user.id).ban({ days: 1, reason: reason })
     const embed = new MessageEmbed()
       .setTitle("User Kicked")
       .setDescription(`Kicked ${user} for \`${reason}\`.`)
@@ -36,6 +35,7 @@ module.exports = {
     interaction.reply({ embeds: [embed] });
 
     if (logChannel) {
+      const logChannelId = logChannel.toString().replace(/[^a-zA-Z0-9 ]/g, "");
       const logEmbed = new MessageEmbed()
         .setTitle("User Kicked")
         .addFields(
