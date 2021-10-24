@@ -1,12 +1,12 @@
 const { MessageEmbed } = require("discord.js");
-const guildConfigSchema = require("../schemas/GuildConfigSchema");
-const mongo = require("../modules/mongo");
+const Database = require("better-sqlite3");
+const db = new Database("guildconf.db", { verbose: console.log });
 
 module.exports = {
   name: "interactionCreate",
   async execute(interaction, client) {
     const guildId = interaction.guildId;
-    // if (!interaction.isCommand()) return;
+    // if (!interaction.isCommand() | !interaction.isSelectMenu()) return;
 
     if (interaction.customId === "colorprofile") {
       const embed = new MessageEmbed()
@@ -18,24 +18,9 @@ module.exports = {
 
       interaction.reply({ embeds: [embed], components: [] });
 
-      await mongo().then(async (mongoose) => {
-        try {
-          await guildConfigSchema.findOneAndUpdate(
-            {
-              guildId,
-            },
-            {
-              guildId,
-              guildColor: interaction.values[0],
-            },
-            {
-              upsert: true,
-            }
-          );
-        } finally {
-          mongoose.connection.close();
-        }
-      });
+      db.exec(
+        `UPDATE guilds SET guildColor = '${interaction.values[0]}' WHERE guildId = '${guildId}'`
+      );
     }
 
     const command = client.commands.get(interaction.commandName);

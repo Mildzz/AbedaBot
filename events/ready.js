@@ -1,7 +1,7 @@
 require("dotenv").config();
 const register = require("../modules/register");
 const cmds = require("../modules/cmds");
-const mongo = require("../modules/mongo");
+const fetch = require("node-fetch");
 
 module.exports = {
   name: "ready",
@@ -9,27 +9,31 @@ module.exports = {
   async execute(client) {
     cmds(client);
     register(client);
-    mongo();
     console.log(
       `\x1b[31m%s\x1b[0m`,
       `[STATUS]`,
       `Logged in as ${client.user.tag}`
     );
 
-    await mongo().then((mongoose) => {
-      try {
-        console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Connected to mongo");
-      } finally {
-        mongoose.connection.close();
-      }
-    });
+    function start() {
+      setTimeout(function () {
+        fetch("https://api.quotable.io/random")
+          .then((response) => response.json())
+          .then((data) => {
+            client.user.setPresence({
+              activities: [{ name: `"${data.content}" - ${data.author}` }],
+              status: "online",
+              type: "playing",
+            });
+          });
 
-    client.user.setPresence({
-      activities: [
-        { name: `"Fall seven times, stand up eight." - Japanese proverb` },
-      ],
-      status: "online",
-      type: "watching",
-    });
+        start();
+      }, 2700000); //45 minutes
+    }
+    start();
+
+    const Database = require("better-sqlite3");
+    const db = new Database("guildconf.db", { verbose: console.log });
+    console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Connected to SQLite");
   },
 };

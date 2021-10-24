@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const mongo = require('../modules/mongo')
-const guildConfigSchema = require('../schemas/GuildConfigSchema')
+const getGuildColor = require('../modules/getGuildColor')
 
 Date.prototype.getUnixTime = function () {
   return (this.getTime() / 1000) | 0;
@@ -55,92 +54,82 @@ module.exports = {
   async execute(interaction, client) {
     const guild = interaction.guild;
     const guildId = interaction.guildId;
+    const guildColor = getGuildColor(guildId)
 
-    await mongo().then(async (mongoose) => {
-      try {
-        const results = await guildConfigSchema.findOne({
-          guildId,
-        });
-
-        if (interaction.options.getSubcommand() === "server") {
-          const embed = new MessageEmbed()
-            .setTitle("Server Information")
-            .addFields(
-              { name: "Name", value: `${guild.name}`, inline: true },
-              { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
-              { name: "Language", value: `${guild.preferredLocale}`, inline: true },
-              { name: "Members", value: `${guild.memberCount}`, inline: true },
-              {
-                name: "Created",
-                value: `<t:${new Date(guild.createdAt.getTime()).getUnixTime()}>`,
-                inline: true,
-              }
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(results.guildColor);
-          interaction.reply({ embeds: [embed] });
-        } else if (interaction.options.getSubcommand() === "bot") {
-          const embed = new MessageEmbed()
-            .setTitle("Bot Information")
-            .addFields(
-              { name: "Name", value: `${client.user.username}`, inline: true },
-              { name: "Creator", value: `<@366286884495818755>`, inline: true },
-              {
-                name: "Created",
-                value: `<t:${new Date(
-                  client.user.createdAt.getTime()
-                ).getUnixTime()}>`,
-                inline: true,
-              },
-              { name: "Version", value: `${process.env.VERSION}`, inline: true },
-              { name: "Uptime", value: `${dhm(client.uptime)}`, inline: true },
-              { name: "Commands", value: `${client.commands.size}`, inline: true }
-            )
-            .setThumbnail(client.user.displayAvatarURL())
-            .setColor(results.guildColor);
-          interaction.reply({ embeds: [embed] });
-        } else {
-          const user = interaction.options.getUser("user");
-          const member = guild.members.cache.get(user.id);
-          const embed = new MessageEmbed()
-            .setTitle(`User Information (***${user.tag}***)`)
-            .addFields(
-              {
-                name: "Status",
-                value: `${member.presence.status ?? "Unavailable"}`,
-                inline: true,
-              },
-              {
-                name: "Game",
-                value: `${member.presence.activities[0].name ?? "None"}`,
-                inline: true,
-              },
-              {
-                name: "Nickname",
-                value: `${member.nickname || "None"}`,
-                inline: true,
-              },
-              {
-                name: "Created",
-                value: `<t:${new Date(user.createdAt.getTime()).getUnixTime()}>`,
-                inline: true,
-              },
-              {
-                name: "Joined",
-                value: `<t:${new Date(member.joinedTimestamp).getUnixTime()}>`,
-                inline: true,
-              },
-              { name: "Bot", value: `${user.bot}`, inline: true }
-            )
-            .setThumbnail(user.displayAvatarURL())
-            .setColor(member.displayHexColor);
-          interaction.reply({ embeds: [embed] });
-        }
-  
-        return results.guildColor;
-      } finally {
-        mongoose.connection.close();
-      }
-    });
+    if (interaction.options.getSubcommand() === "server") {
+            const embed = new MessageEmbed()
+              .setTitle("Server Information")
+              .addFields(
+                { name: "Name", value: `${guild.name}`, inline: true },
+                { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
+                { name: "Language", value: `${guild.preferredLocale}`, inline: true },
+                { name: "Members", value: `${guild.memberCount}`, inline: true },
+                {
+                  name: "Created",
+                  value: `<t:${new Date(guild.createdAt.getTime()).getUnixTime()}>`,
+                  inline: true,
+                }
+              )
+              .setThumbnail(guild.iconURL())
+              .setColor(guildColor);
+            interaction.reply({ embeds: [embed] });
+          } else if (interaction.options.getSubcommand() === "bot") {
+            const embed = new MessageEmbed()
+              .setTitle("Bot Information")
+              .addFields(
+                { name: "Name", value: `${client.user.username}`, inline: true },
+                { name: "Creator", value: `<@366286884495818755>`, inline: true },
+                {
+                  name: "Created",
+                  value: `<t:${new Date(
+                    client.user.createdAt.getTime()
+                  ).getUnixTime()}>`,
+                  inline: true,
+                },
+                { name: "Version", value: `${process.env.VERSION}`, inline: true },
+                { name: "Uptime", value: `${dhm(client.uptime)}`, inline: true },
+                { name: "Commands", value: `${client.commands.size}`, inline: true }
+              )
+              .setThumbnail(client.user.displayAvatarURL())
+              .setColor(guildColor);
+            interaction.reply({ embeds: [embed] });
+      interaction.reply("hi");
+    } else {
+      const user = interaction.options.getUser("user");
+      const member = guild.members.cache.get(user.id);
+      const embed = new MessageEmbed()
+        .setTitle(`User Information (***${user.tag}***)`)
+        .addFields(
+          {
+            name: "Status",
+            value: `${member.presence.status ?? "Unavailable"}`,
+            inline: true,
+          },
+          {
+            name: "Game",
+            value: `${member.presence.activities[0].name ?? "None"}`,
+            inline: true,
+          },
+          {
+            name: "Nickname",
+            value: `${member.nickname || "None"}`,
+            inline: true,
+          },
+          {
+            name: "Created",
+            value: `<t:${new Date(user.createdAt.getTime()).getUnixTime()}>`,
+            inline: true,
+          },
+          {
+            name: "Joined",
+            value: `<t:${new Date(member.joinedTimestamp).getUnixTime()}>`,
+            inline: true,
+          },
+          { name: "Bot", value: `${user.bot}`, inline: true }
+        )
+        .setThumbnail(user.displayAvatarURL())
+        .setColor(member.displayHexColor);
+      interaction.reply({ embeds: [embed] });
+    }
   },
 };
