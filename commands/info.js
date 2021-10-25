@@ -102,17 +102,17 @@ module.exports = {
         .addFields(
           {
             name: "Status",
-            value: `${member.presence.status ?? "Unavailable"}`,
+            value: `${member.presence.status ?? "offline"}`,
             inline: true,
           },
           {
             name: "Game",
-            value: `${member.presence.activities[0].name ?? "None"}`,
+            value: `${member.presence.activities[0] ?? "None"}`,
             inline: true,
           },
           {
             name: "Nickname",
-            value: `${member.nickname || "None"}`,
+            value: `${member.nickname ?? "None"}`,
             inline: true,
           },
           {
