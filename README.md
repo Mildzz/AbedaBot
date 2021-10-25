@@ -16,3 +16,4 @@ AbedaBot is a bot that allows you to fully customize and bring a spark of color 
 ### AbedaBot is constantly being worked on so many features are coming in the future!
 
 Join the [Abeda Development](https://discord.gg/VzmrCga) server.
+ 
