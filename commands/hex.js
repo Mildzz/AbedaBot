@@ -34,7 +34,7 @@ module.exports = {
   async execute(interaction, client) {
     const guildId = interaction.guildId;
     const color = interaction.options.getString("color");
-    interaction.deferReply();
+    await interaction.deferReply();
 
     if (color) {
       if (re.test(color)) {
