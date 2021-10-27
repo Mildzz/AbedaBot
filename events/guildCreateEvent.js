@@ -9,13 +9,10 @@ module.exports = {
         "INSERT INTO guilds (guildId, guildColor, logChannelId) VALUES (@guildId, @guildColor, @logChannelId)"
       );
 
-      const insertMany = db.transaction((guilds) => {
-        for (const guild of guilds) insert.run(guild);
+      insert.run({
+        guildId: guild.id,
+        guildColor: "#d84343",
       });
-
-      insertMany([
-        { guildId: guild.id, guildColor: "#d84343", logChannelId: null },
-      ]);
 
       console.log(`Bot has joined \`${guild.name}\`. Saved to DB.`);
     } catch (e) {
