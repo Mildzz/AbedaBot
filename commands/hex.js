@@ -38,11 +38,12 @@ module.exports = {
 
     if (color) {
       if (re.test(color)) {
-        noHashColor = color.slice(1);
+        color.includes("#")
+          ? (noHashColor = color.slice(1))
+          : (noHashColor = color);
         fetch(`https://www.thecolorapi.com/id?hex=${noHashColor}`)
           .then((res) => res.json())
           .then((json) => {
-            console.log(json);
             getColor(json, interaction);
           });
       } else {
