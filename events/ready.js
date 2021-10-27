@@ -28,12 +28,12 @@ module.exports = {
           });
 
         start();
-      }, 2700000); //45 minutes
+      }, 7200000); // 2 hours
     }
     start();
 
     const Database = require("better-sqlite3");
-    const db = new Database("guildconf.db", { verbose: console.log });
+    const db = new Database("guildconf.db");
     console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Connected to SQLite");
   },
 };

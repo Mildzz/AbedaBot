@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const getGuildColor = require('../modules/getGuildColor')
+const getGuildColor = require("../modules/getGuildColor");
 
 Date.prototype.getUnixTime = function () {
   return (this.getTime() / 1000) | 0;
@@ -54,45 +54,45 @@ module.exports = {
   async execute(interaction, client) {
     const guild = interaction.guild;
     const guildId = interaction.guildId;
-    const guildColor = getGuildColor(guildId)
+    const guildColor = getGuildColor(guildId);
 
     if (interaction.options.getSubcommand() === "server") {
-            const embed = new MessageEmbed()
-              .setTitle("Server Information")
-              .addFields(
-                { name: "Name", value: `${guild.name}`, inline: true },
-                { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
-                { name: "Language", value: `${guild.preferredLocale}`, inline: true },
-                { name: "Members", value: `${guild.memberCount}`, inline: true },
-                {
-                  name: "Created",
-                  value: `<t:${new Date(guild.createdAt.getTime()).getUnixTime()}>`,
-                  inline: true,
-                }
-              )
-              .setThumbnail(guild.iconURL())
-              .setColor(guildColor);
-            interaction.reply({ embeds: [embed] });
-          } else if (interaction.options.getSubcommand() === "bot") {
-            const embed = new MessageEmbed()
-              .setTitle("Bot Information")
-              .addFields(
-                { name: "Name", value: `${client.user.username}`, inline: true },
-                { name: "Creator", value: `<@366286884495818755>`, inline: true },
-                {
-                  name: "Created",
-                  value: `<t:${new Date(
-                    client.user.createdAt.getTime()
-                  ).getUnixTime()}>`,
-                  inline: true,
-                },
-                { name: "Version", value: `${process.env.VERSION}`, inline: true },
-                { name: "Uptime", value: `${dhm(client.uptime)}`, inline: true },
-                { name: "Commands", value: `${client.commands.size}`, inline: true }
-              )
-              .setThumbnail(client.user.displayAvatarURL())
-              .setColor(guildColor);
-            interaction.reply({ embeds: [embed] });
+      const embed = new MessageEmbed()
+        .setTitle("Server Information")
+        .addFields(
+          { name: "Name", value: `${guild.name}`, inline: true },
+          { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
+          { name: "Language", value: `${guild.preferredLocale}`, inline: true },
+          { name: "Members", value: `${guild.memberCount}`, inline: true },
+          {
+            name: "Created",
+            value: `<t:${new Date(guild.createdAt.getTime()).getUnixTime()}>`,
+            inline: true,
+          }
+        )
+        .setThumbnail(guild.iconURL())
+        .setColor(guildColor);
+      interaction.reply({ embeds: [embed] });
+    } else if (interaction.options.getSubcommand() === "bot") {
+      const embed = new MessageEmbed()
+        .setTitle("Bot Information")
+        .addFields(
+          { name: "Name", value: `${client.user.username}`, inline: true },
+          { name: "Creator", value: `<@366286884495818755>`, inline: true },
+          {
+            name: "Created",
+            value: `<t:${new Date(
+              client.user.createdAt.getTime()
+            ).getUnixTime()}>`,
+            inline: true,
+          },
+          { name: "Version", value: `${process.env.VERSION}`, inline: true },
+          { name: "Uptime", value: `${dhm(client.uptime)}`, inline: true },
+          { name: "Commands", value: `${client.commands.size}`, inline: true }
+        )
+        .setThumbnail(client.user.displayAvatarURL())
+        .setColor(guildColor);
+      interaction.reply({ embeds: [embed] });
       interaction.reply("hi");
     } else {
       const user = interaction.options.getUser("user");

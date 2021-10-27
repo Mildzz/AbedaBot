@@ -6,8 +6,8 @@ const {
   MessageEmbed,
 } = require("discord.js");
 const Database = require("better-sqlite3");
-const db = new Database("guildconf.db", { verbose: console.log });
-const getGuildColor = require('../modules/getGuildColor')
+const db = new Database("guildconf.db");
+const getGuildColor = require("../modules/getGuildColor");
 
 var re = /[0-9A-Fa-f]{6}/g;
 
@@ -59,7 +59,7 @@ module.exports = {
   async execute(interaction, client) {
     const guildId = interaction.guildId;
     const clr = interaction.options.getString("color");
-    const guildColor = getGuildColor(guildId)
+    const guildColor = getGuildColor(guildId);
 
     if (interaction.options.getSubcommand() === "profile") {
       const embed = new MessageEmbed()

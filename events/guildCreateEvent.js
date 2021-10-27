@@ -3,7 +3,7 @@ module.exports = {
   async execute(guild) {
     try {
       const Database = require("better-sqlite3");
-      const db = new Database("guildconf.db", { verbose: console.log });
+      const db = new Database("guildconf.db");
 
       const insert = db.prepare(
         "INSERT INTO guilds (guildId, guildColor, logChannelId) VALUES (@guildId, @guildColor, @logChannelId)"

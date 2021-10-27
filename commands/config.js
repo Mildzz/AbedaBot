@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const Database = require("better-sqlite3");
-const db = new Database("guildconf.db", { verbose: console.log });
+const db = new Database("guildconf.db");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -58,7 +58,7 @@ module.exports = {
           `UPDATE guilds SET staffRole = '${staffRoleId}' WHERE guildId = '${guildId}'`
         );
         const embed = new MessageEmbed()
-          .setTitle("Log Channel")
+          .setTitle("Staff Role")
           .setDescription(
             `Your server's log channel has been set to ${staffRole}`
           )

@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
-const userPerms = require("../modules/userHasPerms");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("ban")
     .setDescription("Ban a user.")
+    .setDefaultPermission(false)
     .addUserOption((option) =>
       option.setName("user").setDescription("Select a user").setRequired(true)
     )
@@ -18,25 +18,55 @@ module.exports = {
     ),
   async execute(interaction, client) {
     const guildId = interaction.guildId;
-    if (userPerms(interaction.member, guildId) === null) {
-      interaction.reply(
-        `This server does not have a staff role configured. If you believe this is a mistake, please run \`/config staff {STAFF ROLE}\``
-      );
-    } else if (userPerms(interaction.member, guildId)) {
+    const Database = require("better-sqlite3");
+    const db = new Database("guildconf.db");
+    const staffRole = await db
+      .prepare(`SELECT staffRole FROM guilds WHERE guildId = '${guildId}'`)
+      .pluck()
+      .get();
+
+    if (!staffRole) {
+      interaction.reply({
+        content: `This server does not have a staff role configured. If you believe this is a mistake, please run \`/config staff {STAFF ROLE}\``,
+        ephemeral: true,
+      });
+    } else {
+      if (!client.application?.owner) await client.application?.fetch();
+
+      const command = await client.guilds.cache
+        .get("886114589102714890")
+        ?.commands.fetch(interaction.commandId);
+
+      const permissions = [
+        {
+          id: `${staffRole}`,
+          type: "ROLE",
+          permission: true,
+        },
+      ];
+
+      await command.permissions.add({ permissions });
+
       const guildColor = getGuildColor(guildId);
       const user = interaction.options.getUser("user");
       const reason = interaction.options.getString("reason");
-      const Database = require("better-sqlite3");
-      const db = new Database("guildconf.db", { verbose: console.log });
       const logChannel = db
         .prepare(`SELECT logChannelId FROM guilds WHERE guildId = '${guildId}'`)
         .pluck()
         .get();
-      const logChannelId = logChannel.toString().replace(/[^a-zA-Z0-9 ]/g, "");
 
-      // interaction.guild.members.cache
-      //   .get(user.id)
-      //   .ban({ days: 1, reason: reason });
+      try {
+        await interaction.guild.members.cache
+          .get(user.id)
+          .ban({ days: 1, reason: reason });
+      } catch (e) {
+        const errorEmbed = new MessageEmbed()
+          .setTitle("An error has occured.")
+          .setDescription(`${e}`)
+          .setColor(0xd84343);
+        interaction.reply({ embeds: [errorEmbed] });
+        return true;
+      }
       const embed = new MessageEmbed()
         .setTitle("User Banned")
         .setDescription(`Banned ${user} for \`${reason}\`.`)
@@ -58,18 +88,13 @@ module.exports = {
           )
           .setColor(guildColor);
         interaction.guild.channels.cache
-          .get(logChannelId)
+          .get(logChannel)
           .send({ embeds: [logEmbed] });
       } else {
         interaction.channel.send(
           "Please configure a log channel using `/config logs {CHANNEL}` to see logs when users are banned."
         );
       }
-    } else {
-      interaction.reply(
-        `You do not have permission to do this. If you believe this is a mistake, please configure your server's staff role using \`/config staff {ROLE}\``,
-        { ephermeral: true }
-      );
     }
   },
 };

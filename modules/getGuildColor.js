@@ -1,5 +1,5 @@
 const Database = require("better-sqlite3");
-const db = new Database("guildconf.db", { verbose: console.log });
+const db = new Database("guildconf.db");
 
 module.exports = (guildId) => {
   const guildColor = db
