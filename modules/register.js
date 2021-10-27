@@ -22,17 +22,17 @@ module.exports = async () => {
     try {
       console.log("Started refreshing application (/) commands.");
 
-      await rest.put(
-        Routes.applicationGuildCommands(
-          process.env.CLIENTID,
-          process.env.GUILDID
-        ),
-        { body: commands }
-      );
+//       await rest.put(
+//         Routes.applicationGuildCommands(
+//           process.env.CLIENTID,
+//           process.env.GUILDID
+//         ),
+//         { body: commands }
+//       );
 
-      //   await rest.put(Routes.applicationCommands(process.env.clientID), {
-      //     body: commands,
-      //   });
+        await rest.put(Routes.applicationCommands(process.env.clientID), {
+          body: commands,
+        });
 
       console.log("Successfully reloaded application (/) commands.");
     } catch (error) {
