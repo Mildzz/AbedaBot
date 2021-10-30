@@ -1,5 +1,5 @@
 # AbedaBot - Discord.js v13.2.0
-AbedaBot is a bot that allows you to fully customize and bring a spark of color to your server. With per server settings for every command available, you'll be able to customize your servers however you'd like.
+AbedaBot is a Discord bot that allows users to easily customize the look and feel of their servers.
 
 # Instruction
 1.  Install [Node.js](https://nodejs.org/en/).

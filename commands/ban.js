@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
@@ -33,9 +34,12 @@ module.exports = {
     } else {
       if (!client.application?.owner) await client.application?.fetch();
 
-      const command = await client.guilds.cache
-        .get("886114589102714890")
+      const guildCommand = await client.guilds.cache
+        .get(process.env.GUILDID)
         ?.commands.fetch(interaction.commandId);
+      const globalCommand = client.application?.commands.fetch(
+        interaction.commandId
+      );
 
       const permissions = [
         {
@@ -45,7 +49,9 @@ module.exports = {
         },
       ];
 
-      await command.permissions.add({ permissions });
+      process.env.DEBUG === "true"
+        ? await guildCommand.permissions.add({ permissions })
+        : await globalCommand.permissions.add({ permissions });
 
       const guildColor = getGuildColor(guildId);
       const user = interaction.options.getUser("user");
