@@ -1,14 +1,14 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed, MessageAttachment } = require("discord.js");
 const fetch = require("node-fetch");
-var re = /[0-9A-Fa-f]{6}/g;
+const re = /[0-9A-Fa-f]{6}/g;
 
 function getColor(json, interaction) {
   const { createCanvas } = require("canvas");
   const canvas = createCanvas(200, 200);
-  var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-  ctx.arc(100, 100, 100, 0, Math.PI * 2);
+    ctx.arc(100, 100, 100, 0, Math.PI * 2);
   ctx.fillStyle = json.hex.value;
   ctx.fill();
 
@@ -36,18 +36,19 @@ module.exports = {
     const color = interaction.options.getString("color");
     await interaction.deferReply();
 
+    let noHashColor;
     if (color) {
       if (re.test(color)) {
         color.includes("#")
-          ? (noHashColor = color.slice(1))
-          : (noHashColor = color);
+            ? (noHashColor = color.slice(1))
+            : (noHashColor = color);
         fetch(`https://www.thecolorapi.com/id?hex=${noHashColor}`)
-          .then((res) => res.json())
-          .then((json) => {
-            getColor(json, interaction);
-          });
+            .then((res) => res.json())
+            .then((json) => {
+              getColor(json, interaction);
+            });
       } else {
-        interaction.editReply({
+        await interaction.editReply({
           content: "Please provide a valid hex code.",
           ephemeral: true,
         });
@@ -55,10 +56,10 @@ module.exports = {
       re.lastIndex = 0;
     } else {
       fetch("https://www.thecolorapi.com/random")
-        .then((res) => res.json())
-        .then((json) => {
-          getColor(json, interaction);
-        });
+          .then((res) => res.json())
+          .then((json) => {
+            getColor(json, interaction);
+          });
     }
   },
 };

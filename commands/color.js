@@ -9,7 +9,7 @@ const Database = require("better-sqlite3");
 const db = new Database("guildconf.db");
 const getGuildColor = require("../modules/getGuildColor");
 
-var re = /[0-9A-Fa-f]{6}/g;
+const re = /[0-9A-Fa-f]{6}/g;
 
 function setGuildColor(clr, guildId, interaction) {
   db.exec(
@@ -17,9 +17,9 @@ function setGuildColor(clr, guildId, interaction) {
   );
   const { createCanvas } = require("canvas");
   const canvas = createCanvas(200, 200);
-  var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-  ctx.arc(100, 100, 100, 0, Math.PI * 2);
+    ctx.arc(100, 100, 100, 0, Math.PI * 2);
   ctx.fillStyle = clr;
   ctx.fill();
 
@@ -127,9 +127,9 @@ module.exports = {
     } else {
       const { createCanvas } = require("canvas");
       const canvas = createCanvas(200, 200);
-      var ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
 
-      ctx.arc(100, 100, 100, 0, Math.PI * 2);
+        ctx.arc(100, 100, 100, 0, Math.PI * 2);
       ctx.fillStyle = guildColor;
       ctx.fill();
 

@@ -21,7 +21,7 @@ module.exports = {
     const Database = require("better-sqlite3");
     const db = new Database("guildconf.db");
     const staffRole = await db
-      .prepare(`SELECT staffRole FROM guilds WHERE guildId = '${guildId}'`)
+      .prepare(`SELECT StaffRole FROM guilds WHERE guildId = '${guildId}'`)
       .pluck()
       .get();
 
@@ -31,26 +31,6 @@ module.exports = {
         ephemeral: true,
       });
     } else {
-      if (!client.application?.owner) await client.application?.fetch();
-
-      const guildCommand = await client.guilds.cache
-        .get(process.env.GUILDID)
-        ?.commands.fetch(interaction.commandId);
-      const globalCommand = client.application?.commands.fetch(
-        interaction.commandId
-      );
-
-      const permissions = [
-        {
-          id: `${staffRole}`,
-          type: "ROLE",
-          permission: true,
-        },
-      ];
-
-      process.env.DEBUG === "true"
-        ? await guildCommand.permissions.add({ permissions })
-        : await globalCommand.permissions.add({ permissions });
 
       const guildColor = getGuildColor(guildId);
       const user = interaction.options.getUser("user");
@@ -60,18 +40,18 @@ module.exports = {
         .pluck()
         .get();
 
-      try {
-        await interaction.guild.members.cache
-          .get(user.id)
-          .kick({ days: 1, reason: reason });
-      } catch (e) {
-        const errorEmbed = new MessageEmbed()
-          .setTitle("An error has occured.")
-          .setDescription(`${e}`)
-          .setColor(0xd84343);
-        interaction.reply({ embeds: [errorEmbed] });
-        return true;
-      }
+      // try {
+      //   await interaction.guild.members.cache
+      //     .get(user.id)
+      //     .kick({ days: 1, reason: reason });
+      // } catch (e) {
+      //   const errorEmbed = new MessageEmbed()
+      //     .setTitle("An error has occured.")
+      //     .setDescription(`\`\`\`${e}\`\`\``)
+      //     .setColor(0xd84343);
+      //   interaction.reply({ embeds: [errorEmbed] });
+      //   return true;
+      // }
       const embed = new MessageEmbed()
         .setTitle("User Kicked")
         .setDescription(`Kicked ${user} for \`${reason}\`.`)

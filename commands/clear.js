@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const getGuildColor = require("../modules/getGuildColor");
+require("../modules/getGuildColor");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,35 +13,8 @@ module.exports = {
         .setDescription("Amount of messages to delete.")
         .setRequired(true)
     ),
-  async execute(interaction, client) {
-    const guildId = interaction.guildId;
+  async execute(interaction) {
 
-    if (!staffRole) {
-      interaction.reply({
-        content: `This server does not have a staff role configured. If you believe this is a mistake, please run \`/config staff {STAFF ROLE}\``,
-        ephemeral: true,
-      });
-    } else {
-      if (!client.application?.owner) await client.application?.fetch();
-
-      const guildCommand = await client.guilds.cache
-        .get(process.env.GUILDID)
-        ?.commands.fetch(interaction.commandId);
-      const globalCommand = client.application?.commands.fetch(
-        interaction.commandId
-      );
-
-      const permissions = [
-        {
-          id: `${staffRole}`,
-          type: "ROLE",
-          permission: true,
-        },
-      ];
-
-      process.env.DEBUG === "true"
-        ? await guildCommand.permissions.add({ permissions })
-        : await globalCommand.permissions.add({ permissions });
 
       const amount = interaction.options.getInteger("messages");
       const errorEmbed = new MessageEmbed()
@@ -67,6 +40,6 @@ module.exports = {
             interaction.reply({ embeds: [errorEmbed] });
           });
       }
-    }
+    //}
   },
 };
