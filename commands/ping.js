@@ -10,7 +10,7 @@ module.exports = {
 
     const embed = new MessageEmbed()
       .setTitle("Ping")
-      .setDescription(`${client.ws.ping}`)
+      .setDescription(`${interaction.client.ws.ping}`)
       .setColor(guildColor);
     interaction.reply({ embeds: [embed] });
   },

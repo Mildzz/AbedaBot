@@ -1,6 +1,7 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const {SlashCommandBuilder} = require("@discordjs/builders");
+const {MessageEmbed} = require("discord.js");
 require("../modules/getGuildColor");
+const getGuildLanguage = require("../modules/getGuildLanguage");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,32 +15,32 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    const language = require(`../languages/${getGuildLanguage(interaction.guildId)}`)
 
+    const amount = interaction.options.getInteger("messages");
+    const errorEmbed = new MessageEmbed()
+      .setTitle(language.error)
+      .setColor(0xd84343);
 
-      const amount = interaction.options.getInteger("messages");
-      const errorEmbed = new MessageEmbed()
-        .setTitle("An error has occured")
-        .setColor(0xd84343);
-
-      if (amount > 100 || amount < 2) {
-        errorEmbed.setDescription(
-          "Please enter an amount of messages between 1 & 100."
-        );
-        interaction.reply({ embeds: [errorEmbed] });
-      } else {
-        interaction.channel
-          .bulkDelete(amount, true)
-          .then((messages) =>
-            interaction.reply({
-              content: `Cleared ${messages.size} messages.`,
-              ephemeral: true,
-            })
-          )
-          .catch((e) => {
-            errorEmbed.setDescription(`\`\`\`${e}\`\`\``);
-            interaction.reply({ embeds: [errorEmbed] });
-          });
-      }
+    if (amount > 100 || amount < 2) {
+      errorEmbed.setDescription(
+        language.clearError
+      );
+      interaction.reply({embeds: [errorEmbed]});
+    } else {
+      interaction.channel
+        .bulkDelete(amount, true)
+        .then((messages) =>
+          interaction.reply({
+            content: `${language.cleared} ${messages.size} ${language.messages}.`,
+            ephemeral: true,
+          })
+        )
+        .catch((e) => {
+          errorEmbed.setDescription(`\`\`\`${e}\`\`\``);
+          interaction.reply({embeds: [errorEmbed]});
+        });
+    }
     //}
   },
 };

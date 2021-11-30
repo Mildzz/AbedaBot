@@ -1,4 +1,4 @@
-# AbedaBot - Discord.js v13.3.0
+# AbedaBot - Discord.js v13.3.1
 AbedaBot is a Discord bot that allows users to easily customize the look and feel of their servers.
 
 # [Commands](https://abeda.net/commands)

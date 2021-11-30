@@ -8,7 +8,7 @@ module.exports = {
       const db = new Database("guildconf.db");
 
       const insert = db.prepare(
-        "INSERT INTO guilds (guildId, guildColor, StaffRole, logChannelId) VALUES (@guildId, @guildColor, @StaffRole, @logChannelId)"
+        "INSERT INTO guilds (guildId, guildColor, StaffRole, logChannelId, language) VALUES (@guildId, @guildColor, @StaffRole, @logChannelId, @language)"
       );
 
       // Set Command Permissions
@@ -25,6 +25,7 @@ module.exports = {
         guildColor: "#d84343",
         StaffRole: null,
         logChannelId: null,
+        language: "en-US",
       });
 
       console.log(`Bot has joined \`${guild.name}\`. Uploading commands...`);

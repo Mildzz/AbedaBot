@@ -2,6 +2,7 @@ require("dotenv").config();
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
+const getGuildLanguage = require("../modules/getGuildLanguage");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,6 +20,7 @@ module.exports = {
         ),
     async execute(interaction, client) {
         const guildId = interaction.guildId;
+        const language = require(`../languages/${getGuildLanguage(guildId)}`)
         const Database = require("better-sqlite3");
         const db = new Database("guildconf.db");
         const staffRole = await db
@@ -28,7 +30,7 @@ module.exports = {
 
         if (!staffRole) {
             interaction.reply({
-                content: `This server does not have a staff role configured. If you believe this is a mistake, please run \`/config staff {STAFF ROLE}\``,
+                content: language.noStaffRole,
                 ephemeral: true,
             });
         } else {
@@ -53,20 +55,20 @@ module.exports = {
             //   return true;
             // }
             const embed = new MessageEmbed()
-                .setTitle("User Banned")
-                .setDescription(`Banned ${user} for \`${reason}\`.`)
+                .setTitle(language.userBanned)
+                .setDescription(`${language.banned} ${user} ${language.for} \`${reason}\`.`)
                 .setColor(guildColor);
             interaction.reply({embeds: [embed]});
 
             if (logChannel) {
                 const logEmbed = new MessageEmbed()
-                    .setTitle("User Banned")
+                    .setTitle(language.userBanned)
                     .addFields(
-                        {name: "User", value: `${user}`, inline: true},
-                        {name: "Reason", value: `${reason}`, inline: true},
-                        {name: "Banned By", value: `${interaction.user}`, inline: true},
+                        {name: language.user, value: `${user}`, inline: true},
+                        {name: language.reason, value: `${reason}`, inline: true},
+                        {name: language.bannedBy, value: `${interaction.user}`, inline: true},
                         {
-                            name: "When",
+                            name: language.when,
                             value: `<t:${Math.round(new Date().getTime() / 1000)}:R>`,
                             inline: true,
                         }
@@ -77,7 +79,7 @@ module.exports = {
                     .send({embeds: [logEmbed]});
             } else {
                 interaction.channel.send(
-                    "Please configure a log channel using `/config logs {CHANNEL}` to see logs when users are banned."
+                    language.noLogsChannel
                 );
             }
         }

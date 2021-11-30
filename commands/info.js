@@ -1,6 +1,7 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
+const getGuildLanguage = require("../modules/getGuildLanguage");
 
 Date.prototype.getUnixTime = function () {
     return (this.getTime() / 1000) | 0;
@@ -54,18 +55,19 @@ module.exports = {
     async execute(interaction, client) {
         const guild = interaction.guild;
         const guildId = interaction.guildId;
+        const language = require(`../languages/${getGuildLanguage(guildId)}`)
         const guildColor = getGuildColor(guildId);
 
         if (interaction.options.getSubcommand() === "server") {
             const embed = new MessageEmbed()
-                .setTitle("Server Information")
+                .setTitle(language.serverInfo)
                 .addFields(
-                    {name: "Name", value: `${guild.name}`, inline: true},
-                    {name: "Owner", value: `<@${guild.ownerId}>`, inline: true},
-                    {name: "Language", value: `${guild.preferredLocale}`, inline: true},
-                    {name: "Members", value: `${guild.memberCount}`, inline: true},
+                    {name: language.name, value: `${guild.name}`, inline: true},
+                    {name: language.owner, value: `<@${guild.ownerId}>`, inline: true},
+                    {name: language.language, value: `${guild.preferredLocale}`, inline: true},
+                    {name: language.members, value: `${guild.memberCount}`, inline: true},
                     {
-                        name: "Created",
+                        name: language.created,
                         value: `<t:${new Date(guild.createdAt.getTime()).getUnixTime()}>`,
                         inline: true,
                     }
@@ -75,57 +77,56 @@ module.exports = {
             interaction.reply({embeds: [embed]});
         } else if (interaction.options.getSubcommand() === "bot") {
             const embed = new MessageEmbed()
-                .setTitle("Bot Information")
+                .setTitle(language.botInfo)
                 .addFields(
-                    {name: "Name", value: `${client.user.username}`, inline: true},
-                    {name: "Creator", value: `<@366286884495818755>`, inline: true},
+                    {name: language.name, value: `${client.user.username}`, inline: true},
+                    {name: language.creator, value: `<@366286884495818755>`, inline: true},
                     {
-                        name: "Created",
+                        name: language.created,
                         value: `<t:${new Date(
                             client.user.createdAt.getTime()
                         ).getUnixTime()}>`,
                         inline: true,
                     },
-                    {name: "Version", value: `${process.env.VERSION}`, inline: true},
-                    {name: "Uptime", value: `${dhm(client.uptime)}`, inline: true},
-                    {name: "Commands", value: `${client.commands.size}`, inline: true}
+                    {name: language.version, value: `${process.env.VERSION}`, inline: true},
+                    {name: language.uptime, value: `${dhm(client.uptime)}`, inline: true},
+                    {name: language.commands, value: `${client.commands.size}`, inline: true}
                 )
                 .setThumbnail(client.user.displayAvatarURL())
                 .setColor(guildColor);
             interaction.reply({embeds: [embed]});
-            interaction.reply("hi");
         } else {
             const user = interaction.options.getUser("user");
             const member = guild.members.cache.get(user.id);
             const embed = new MessageEmbed()
-                .setTitle(`User Information (***${user.tag}***)`)
+                .setTitle(`${language.userInfo} (***${user.tag}***)`)
                 .addFields(
                     {
-                        name: "Status",
+                        name: language.status,
                         value: `${member.presence.status ?? "offline"}`,
                         inline: true,
                     },
                     {
-                        name: "Game",
-                        value: `${member.presence.activities[0] ?? "None"}`,
+                        name: language.game,
+                        value: `${member.presence.activities[0] ?? language.none}`,
                         inline: true,
                     },
                     {
-                        name: "Nickname",
+                        name: language.nickname,
                         value: `${member.nickname ?? "None"}`,
                         inline: true,
                     },
                     {
-                        name: "Created",
+                        name: language.created,
                         value: `<t:${new Date(user.createdAt.getTime()).getUnixTime()}>`,
                         inline: true,
                     },
                     {
-                        name: "Joined",
+                        name: language.joined,
                         value: `<t:${new Date(member.joinedTimestamp).getUnixTime()}>`,
                         inline: true,
                     },
-                    {name: "Bot", value: `${user.bot}`, inline: true}
+                    {name: language.bot, value: `${user.bot}`, inline: true}
                 )
                 .setThumbnail(user.displayAvatarURL())
                 .setColor(member.displayHexColor);
