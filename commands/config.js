@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const {MessageEmbed, Message} = require("discord.js");
+const {MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 const Database = require("better-sqlite3");
@@ -136,7 +136,26 @@ module.exports = {
           interaction.reply({embeds: [errorEmbed]});
         }
       } else if (interaction.options.getSubcommand() === "language") {
-        interaction.reply("Coming soon.")
+        const embed = new MessageEmbed()
+          .setTitle("Guild Color")
+          .setDescription(
+            "Please select a color profile below or set your own with `/color set {HEX_CODE}`"
+          )
+          .setColor(guildColor);
+
+        const row = new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId("language")
+            .setPlaceholder("Please Choose a Language")
+            .addOptions([
+              {
+                label: "English",
+                description: "Set this guild's language to english.",
+                value: "en-US",
+              }
+            ])
+        );
+        interaction.reply({ embeds: [embed], components: [row] });
       }
     }
 
