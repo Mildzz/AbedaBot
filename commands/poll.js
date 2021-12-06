@@ -43,7 +43,7 @@ module.exports = {
             labels: optionsArray,
             datasets: [{
               data: [0, 0, 0, 0],
-              backgroundColor: [red, blue, green]
+              backgroundColor: [red, blue, green, red, blue, green, red, blue, green]
             }],
           },
           options: {
