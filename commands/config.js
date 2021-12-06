@@ -137,9 +137,9 @@ module.exports = {
         }
       } else if (interaction.options.getSubcommand() === "language") {
         const embed = new MessageEmbed()
-          .setTitle("Guild Color")
+          .setTitle(`Guild ${language.language}`)
           .setDescription(
-            "Please select a color profile below or set your own with `/color set {HEX_CODE}`"
+            "Please select a language below."
           )
           .setColor(guildColor);
 
