@@ -56,7 +56,7 @@ module.exports = {
 
       const embed = new MessageEmbed()
         .setTitle(language.guildColor)
-        .setDescription(`${setColor} \`${clr}\``)
+        .setDescription(`${language.setColor} \`${clr}\``)
         .setThumbnail("attachment://guildColor.png")
         .setColor(clr);
       interaction.reply({ embeds: [embed], files: [attachment] });

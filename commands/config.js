@@ -152,6 +152,11 @@ module.exports = {
                 label: "English",
                 description: "Set this guild's language to english.",
                 value: "en-US",
+              },
+              {
+                label: "Norsk",
+                description: "Sett dette laugets språk til norsk.",
+                value: "no",
               }
             ])
         );

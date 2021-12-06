@@ -45,5 +45,9 @@ module.exports = {
         });
       }
     }
+
+    if (interaction.isButton()) {
+      interaction.deferUpdate()
+    }
   },
 };

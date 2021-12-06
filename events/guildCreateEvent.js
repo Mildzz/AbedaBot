@@ -1,4 +1,4 @@
-// noinspection JSClosureCompilerSyntax
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: "guildCreate",
@@ -64,6 +64,13 @@ module.exports = {
 
     console.log(`Added commands to ${guild.name}`)
 
+    const joinEmbed = new MessageEmbed()
+      .setTitle('Guild Joined')
+      .setDescription(`Joined "${guild.name}" with ${guild.members.cache.size} members.`)
+      .setFooter(`Owner: ${guild.client.users.cache.get(guild.ownerId).tag} (${guild.ownerId})`, guild.iconURL())
+      .setColor(0xd84343)
+
+    guild.client.guilds.cache.get('886114589102714890').channels.cache.get('913578478899712030').send({ embeds: [joinEmbed] })
+
   },
 };
-// How do I get an interaction's commandId from another file

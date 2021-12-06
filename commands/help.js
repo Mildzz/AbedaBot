@@ -22,7 +22,7 @@ module.exports = {
 
     if (!cmd) {
       const noCmdEmbed = new MessageEmbed()
-        .setTitle(`AbedaBot ${language.Help}`)
+        .setTitle(`AbedaBot ${language.help}`)
         .setDescription(
           language.specCmd
         )
