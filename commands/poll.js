@@ -74,6 +74,7 @@ module.exports = {
     const initPollChart = await response.json();
 
     const embed = new MessageEmbed()
+      .setTitle(title)
       .setColor(guildColor)
       .setImage(`${initPollChart.url}`)
     try {
