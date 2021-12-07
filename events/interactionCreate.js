@@ -47,7 +47,7 @@ module.exports = {
     }
 
     if (interaction.isButton()) {
-      interaction.deferUpdate()
+      await interaction.deferUpdate()
     }
   },
 };

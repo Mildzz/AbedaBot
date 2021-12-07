@@ -3,7 +3,7 @@ const {MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 const Database = require("better-sqlite3");
-const fs = require("fs");
+require("fs");
 const db = new Database("guildconf.db");
 
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
         .setName("language")
         .setDescription("The language for your guild.")
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(interaction.guildId);
@@ -155,7 +155,7 @@ module.exports = {
               },
               {
                 label: "Norsk",
-                description: "Sett dette laugets språk til norsk.",
+                description: "Sett språket i botten til norsk.",
                 value: "no",
               }
             ])

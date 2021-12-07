@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const {SlashCommandBuilder} = require("@discordjs/builders");
+const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 
@@ -17,7 +17,7 @@ module.exports = {
         .setDescription("Your reason for kicking this member.")
         .setRequired(true)
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const Database = require("better-sqlite3");
@@ -58,15 +58,15 @@ module.exports = {
         .setTitle(language.userKicked)
         .setDescription(`${language.kicked} ${user} ${language.for} \`${reason}\`.`)
         .setColor(guildColor);
-      interaction.reply({ embeds: [embed] });
+      interaction.reply({embeds: [embed]});
 
       if (logChannel) {
         const logEmbed = new MessageEmbed()
           .setTitle(language.userKicked)
           .addFields(
-            { name: language.user, value: `${user}`, inline: true },
-            { name: language.reason, value: `${reason}`, inline: true },
-            { name: language.kickedBy, value: `${interaction.user}`, inline: true },
+            {name: language.user, value: `${user}`, inline: true},
+            {name: language.reason, value: `${reason}`, inline: true},
+            {name: language.kickedBy, value: `${interaction.user}`, inline: true},
             {
               name: language.when,
               value: `<t:${Math.round(new Date().getTime() / 1000)}:R>`,
@@ -76,7 +76,7 @@ module.exports = {
           .setColor(guildColor);
         interaction.guild.channels.cache
           .get(logChannel)
-          .send({ embeds: [logEmbed] });
+          .send({embeds: [logEmbed]});
       } else {
         interaction.channel.send(
           language.noLogsChannel

@@ -3,8 +3,6 @@ const {MessageEmbed, MessageAttachment} = require("discord.js");
 const fetch = require("node-fetch");
 const re = /[0-9A-Fa-f]{6}/g;
 const getGuildLanguage = require("../modules/getGuildLanguage");
-const {createCanvas} = require("canvas");
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("hex")
@@ -14,7 +12,7 @@ module.exports = {
         .setName("color")
         .setDescription("A valid hex code you would like to look up.")
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
 

@@ -14,7 +14,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName("command").setDescription("The command to look up.")
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(guildId);

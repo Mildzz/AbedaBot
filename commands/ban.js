@@ -18,7 +18,7 @@ module.exports = {
                 .setDescription("Your reason for banning this member.")
                 .setRequired(true)
         ),
-    async execute(interaction, client) {
+    async execute(interaction) {
         const guildId = interaction.guildId;
         const language = require(`../languages/${getGuildLanguage(guildId)}`)
         const Database = require("better-sqlite3");
@@ -48,7 +48,7 @@ module.exports = {
             //     .ban({ days: 1, reason: reason });
             // } catch (e) {
             //   const errorEmbed = new MessageEmbed()
-            //     .setTitle("An error has occured.")
+            //     .setTitle("An error has occurred.")
             //     .setDescription(`\`\`\`${e}\`\`\``)
             //     .setColor(0xd84343);
             //   interaction.reply({ embeds: [errorEmbed] });

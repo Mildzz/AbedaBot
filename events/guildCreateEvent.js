@@ -1,3 +1,5 @@
+// noinspection SyntaxError
+
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
@@ -7,19 +9,18 @@ module.exports = {
       const Database = require("better-sqlite3");
       const db = new Database("guildconf.db");
 
+      // noinspection SyntaxError
       const insert = db.prepare(
         "INSERT INTO guilds (guildId, guildColor, StaffRole, logChannelId, language) VALUES (@guildId, @guildColor, @StaffRole, @logChannelId, @language)"
       );
 
       // Set Command Permissions
-
-      const staffRole = await db
-          .prepare(
-              `SELECT StaffRole FROM guilds WHERE guildId = '${guild.id}'`
-          )
-          .pluck()
-          .get();
-
+      await db
+        .prepare(
+          `SELECT StaffRole FROM guilds WHERE guildId = '${guild.id}'`
+        )
+        .pluck()
+        .get();
       insert.run({
         guildId: guild.id,
         guildColor: "#d84343",

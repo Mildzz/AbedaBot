@@ -20,7 +20,7 @@ module.exports = {
       option.setName("options").setDescription("Separate each option by using two semicolons ( ;; )")
         .setRequired(true)
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(guildId);

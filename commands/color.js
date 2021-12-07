@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const {
-  MessageActionRow,
-  MessageSelectMenu,
   MessageAttachment,
   MessageEmbed,
 } = require("discord.js");
@@ -9,8 +7,6 @@ const Database = require("better-sqlite3");
 const db = new Database("guildconf.db");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
-const {createCanvas} = require("canvas");
-
 const re = /[0-9A-Fa-f]{6}/g;
 
 module.exports = {
@@ -36,7 +32,7 @@ module.exports = {
         .setName("profile")
         .setDescription("Set the server's color profile.")
     ),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
 

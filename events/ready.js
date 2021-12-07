@@ -1,8 +1,9 @@
+// noinspection SyntaxError
+
 require("dotenv").config();
 const fetch = require("node-fetch");
 const cmds = require("../modules/cmds")
-const Database = require("better-sqlite3");
-
+require("better-sqlite3");
 module.exports = {
     name: "ready",
     once: true,
