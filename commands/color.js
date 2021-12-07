@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const {SlashCommandBuilder} = require("@discordjs/builders");
 const {
   MessageAttachment,
   MessageEmbed,
@@ -40,7 +40,7 @@ module.exports = {
       db.exec(
         `UPDATE guilds SET guildColor = '${clr}' WHERE guildId = '${guildId}'`
       );
-      const { createCanvas } = require("canvas");
+      const {createCanvas} = require("canvas");
       const canvas = createCanvas(200, 200);
       const ctx = canvas.getContext("2d");
 
@@ -55,7 +55,7 @@ module.exports = {
         .setDescription(`${language.setColor} \`${clr}\``)
         .setThumbnail("attachment://guildColor.png")
         .setColor(clr);
-      interaction.reply({ embeds: [embed], files: [attachment] });
+      interaction.reply({embeds: [embed], files: [attachment]});
     }
 
     const clr = interaction.options.getString("color");
@@ -74,11 +74,11 @@ module.exports = {
       }
       re.lastIndex = 0;
     } else {
-      const { createCanvas } = require("canvas");
+      const {createCanvas} = require("canvas");
       const canvas = createCanvas(200, 200);
-        const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d");
 
-        ctx.arc(100, 100, 100, 0, Math.PI * 2);
+      ctx.arc(100, 100, 100, 0, Math.PI * 2);
       ctx.fillStyle = guildColor;
       ctx.fill();
 
@@ -92,7 +92,7 @@ module.exports = {
         .setDescription(`${language.getColorDesc} \`${guildColor}\``)
         .setThumbnail("attachment://guildColor.png")
         .setColor(guildColor);
-      interaction.reply({ embeds: [embed], files: [attachment] });
+      interaction.reply({embeds: [embed], files: [attachment]});
     }
   },
 };

@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const {SlashCommandBuilder} = require("@discordjs/builders");
+const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 
@@ -14,6 +14,6 @@ module.exports = {
       .setTitle(language.ping)
       .setDescription(`${interaction.client.ws.ping}`)
       .setColor(guildColor);
-    interaction.reply({ embeds: [embed] });
+    interaction.reply({embeds: [embed]});
   },
 };

@@ -1,6 +1,6 @@
 // noinspection SyntaxError
 
-const { MessageEmbed } = require('discord.js')
+const {MessageEmbed} = require('discord.js')
 
 module.exports = {
   name: "guildCreate",
@@ -37,8 +37,8 @@ module.exports = {
     /*** Let's get messy ***/
 
     require("dotenv").config();
-    const { REST } = require("@discordjs/rest");
-    const { Routes } = require("discord-api-types/v9");
+    const {REST} = require("@discordjs/rest");
+    const {Routes} = require("discord-api-types/v9");
     const fs = require("fs");
 
     const commands = [];
@@ -60,7 +60,7 @@ module.exports = {
         process.env.CLIENTID,
         guild.id
       ),
-      { body: commands }
+      {body: commands}
     );
 
     console.log(`Added commands to ${guild.name}`)
@@ -71,7 +71,7 @@ module.exports = {
       .setFooter(`Owner: ${guild.client.users.cache.get(guild.ownerId).tag} (${guild.ownerId})`, guild.iconURL())
       .setColor(0xd84343)
 
-    guild.client.guilds.cache.get('886114589102714890').channels.cache.get('913578478899712030').send({ embeds: [joinEmbed] })
+    guild.client.guilds.cache.get('886114589102714890').channels.cache.get('913578478899712030').send({embeds: [joinEmbed]})
 
   },
 };

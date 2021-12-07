@@ -1,6 +1,6 @@
 {
   "name": "abedabot",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "AbedaBot.. the bot for Abeda..",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "dotenv": "^10.0.0",
     "fetch": "^1.1.0",
     "mongoose": "^6.0.12",
-    "node-fetch": "^2.6.5"
+    "node-fetch": "^2.6.5",
+    "pm2": "^5.1.2"
   }
 }

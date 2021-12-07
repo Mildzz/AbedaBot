@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const {MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const {MessageEmbed, MessageActionRow, MessageSelectMenu} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 const Database = require("better-sqlite3");
@@ -91,6 +91,7 @@ module.exports = {
             const banId = cmds.find(({name}) => name === 'ban').commandId;
             const kickId = cmds.find(({name}) => name === 'kick').commandId;
             const clearId = cmds.find(({name}) => name === 'clear').commandId;
+            const restartId = cmds.find(({name}) => name === 'restart').commandId;
 
             const fullPermissions = [
               {
@@ -114,6 +115,14 @@ module.exports = {
                 permissions: [{
                   id: staffRole,
                   type: 'ROLE',
+                  permission: true,
+                }],
+              },
+              {
+                id: restartId,
+                permissions: [{
+                  id: "366286884495818755",
+                  type: 'USER',
                   permission: true,
                 }],
               },
@@ -160,7 +169,7 @@ module.exports = {
               }
             ])
         );
-        interaction.reply({ embeds: [embed], components: [row] });
+        interaction.reply({embeds: [embed], components: [row]});
       }
     }
 
