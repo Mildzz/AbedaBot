@@ -71,7 +71,7 @@ module.exports = {
       .setFooter(`Owner: ${guild.client.users.cache.get(guild.ownerId).tag} (${guild.ownerId})`, guild.iconURL())
       .setColor(0xd84343)
 
-    guild.client.guilds.cache.get('886114589102714890').channels.cache.get('913578478899712030').send({embeds: [joinEmbed]})
+    // guild.client.guilds.cache.get('886114589102714890').channels.cache.get('913578478899712030').send({embeds: [joinEmbed]})
 
   },
 };

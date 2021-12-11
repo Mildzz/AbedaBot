@@ -25,7 +25,7 @@ module.exports = {
       subcommand
         .setName("staff")
         .setDescription("The staff role for your guild.")
-        .addMentionableOption((option) =>
+        .addRoleOption((option) =>
           option
             .setName("role")
             .setDescription("Your staff role.")
@@ -91,7 +91,6 @@ module.exports = {
             const banId = cmds.find(({name}) => name === 'ban').commandId;
             const kickId = cmds.find(({name}) => name === 'kick').commandId;
             const clearId = cmds.find(({name}) => name === 'clear').commandId;
-            const restartId = cmds.find(({name}) => name === 'restart').commandId;
 
             const fullPermissions = [
               {
@@ -118,14 +117,6 @@ module.exports = {
                   permission: true,
                 }],
               },
-              {
-                id: restartId,
-                permissions: [{
-                  id: "366286884495818755",
-                  type: 'USER',
-                  permission: true,
-                }],
-              },
             ];
 
             await interaction.guild?.commands.permissions.set({fullPermissions});
@@ -143,6 +134,7 @@ module.exports = {
             .setDescription(`\`\`\`${e}\`\`\``)
             .setColor(0xd84343);
           interaction.reply({embeds: [errorEmbed]});
+          console.log(e)
         }
       } else if (interaction.options.getSubcommand() === "language") {
         const embed = new MessageEmbed()
