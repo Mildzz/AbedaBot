@@ -60,7 +60,7 @@ module.exports = {
           .setColor(guildColor);
         interaction.reply({embeds: [embed]});
       } else if (interaction.options.getSubcommand() === "staff") {
-        const staffRole = interaction.options.getMentionable("role");
+        const staffRole = interaction.options.getRole("role");
         const staffRoleId = staffRole.toString().replace(/[^a-zA-Z0-9 ]/g, "");
         db.exec(
           `UPDATE guilds SET staffRole = '${staffRoleId}' WHERE guildId = '${guildId}'`

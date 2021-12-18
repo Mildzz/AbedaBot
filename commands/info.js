@@ -91,7 +91,8 @@ module.exports = {
           },
           {name: language.version, value: `${process.env.VERSION}`, inline: true},
           {name: language.uptime, value: `${dhm(client.uptime)}`, inline: true},
-          {name: language.commands, value: `${client.commands.size}`, inline: true}
+          {name: language.commands, value: `${client.commands.size}`, inline: true},
+          {name: "Guild Count", value: `${client.guilds.cache.size}`, inline: true}
         )
         .setThumbnail(client.user.displayAvatarURL())
         .setColor(guildColor);

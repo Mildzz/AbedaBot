@@ -19,6 +19,9 @@ module.exports = {
     .addStringOption((option) =>
       option.setName("options").setDescription("Separate each option by using two semicolons ( ;; )")
         .setRequired(true)
+    )
+    .addBooleanOption((option) =>
+      option.setName("multivote").setDescription("Allow members to vote more than once? (Defaults to false)")
     ),
   async execute(interaction) {
     const guildId = interaction.guildId;
@@ -27,6 +30,7 @@ module.exports = {
     const title = interaction.options.getString("title")
     const channel = interaction.options.getChannel('channel')
     const optionsArray = interaction.options.getString("options").split(";;");
+    const multivote = interaction.options.getBoolean("multivote");
     const red = "rgb(235, 99, 87)";
     const blue = "rgb(99, 170, 224)";
     const green = "rgb(60, 227, 165)";
@@ -100,8 +104,8 @@ module.exports = {
         let usersVoted = [];
         collector.on('collect', async i => {
           /*** Chart Update yada yada yada ***/
-          if (usersVoted.includes(i.user.id)) return;
-          reactions.splice(i.customId, 1, reactions[i.customId] += 1)
+          if(multivote === null) if (usersVoted.includes(i.user.id)) return;
+          reactions.splice(+i.customId, 1, reactions[+i.customId] += 1)
           const pollChart = `${initPollChart.url}?data1=${reactions.toString().replaceAll('"', "")}`
           const embed = new MessageEmbed()
             .setTitle(title)

@@ -26,11 +26,6 @@ module.exports = {
     )
     .addSubcommand((subcommand) =>
       subcommand.setName("get").setDescription("Get the server's color.")
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("profile")
-        .setDescription("Set the server's color profile.")
     ),
   async execute(interaction) {
     const guildId = interaction.guildId;
