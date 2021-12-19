@@ -8,7 +8,7 @@ module.exports = {
     .setName("clear")
     .setDescription("Clear a specified amount of messages.")
     .setDefaultPermission(false)
-    .addIntegerOption((option) =>
+    .addNumberOption((option) =>
       option
         .setName("messages")
         .setDescription("Amount of messages to delete.")
@@ -17,7 +17,7 @@ module.exports = {
   async execute(interaction) {
     const language = require(`../languages/${getGuildLanguage(interaction.guildId)}`)
 
-    const amount = interaction.options.getInteger("messages");
+    const amount = interaction.options.getNumber("messages");
     const errorEmbed = new MessageEmbed()
       .setTitle(language.error)
       .setColor(0xd84343);

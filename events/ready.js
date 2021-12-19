@@ -2,13 +2,20 @@
 
 require("dotenv").config();
 const fetch = require("node-fetch");
-const cmds = require("../modules/cmds")
+const cmds = require("../modules/cmds");
+const staffCmds = require('../modules/staffCmds')
+const adminCmds = require('../modules/adminCommands')
 require("better-sqlite3");
+const fs = require("fs");
+const {REST} = require("@discordjs/rest");
+const {Routes} = require("discord-api-types/v9");
 module.exports = {
   name: "ready",
   once: true,
   async execute(client) {
     await cmds(client)
+    await staffCmds(client)
+    await adminCmds(client)
 
     console.log(
       `\x1b[31m%s\x1b[0m`,
@@ -45,6 +52,18 @@ module.exports = {
       `CREATE TABLE IF NOT EXISTS reactionRoles (guildId varchar, messageId varchar, channelId varchar, role varchar, emoji varchar)`
     );
     console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Connected to SQLite");
+
+    const commands = [];
+    const commandFiles = fs
+      .readdirSync(`./commands/`)
+      .filter((file) => file.endsWith(".js"));
+
+    for (const file of commandFiles) {
+      const command = require(`../commands/${file}`);
+      commands.push(command.data.toJSON());
+    }
+
+    console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Global commands successfully registered.")
 
   },
 };

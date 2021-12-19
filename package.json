@@ -16,8 +16,10 @@
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "fetch": "^1.1.0",
+    "indefinite": "^2.4.1",
     "mongoose": "^6.0.12",
     "node-fetch": "^2.6.5",
-    "pm2": "^5.1.2"
+    "pm2": "^5.1.2",
+    "progress": "^2.0.3"
   }
 }

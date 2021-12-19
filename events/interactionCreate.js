@@ -1,6 +1,7 @@
 const {MessageEmbed} = require("discord.js");
 const Database = require("better-sqlite3");
 const db = new Database("guildconf.db");
+const a = require('indefinite');
 
 module.exports = {
   name: "interactionCreate",
@@ -27,16 +28,26 @@ module.exports = {
         db.exec(
           `UPDATE guilds SET language = '${interaction.values[0]}' WHERE guildId = '${guildId}'`
         );
+      } else if (interaction.customId === "filter") {
+        const embed = new MessageEmbed()
+          .setTitle("Color Profile")
+          .setDescription(
+            `You have successfully created ${a(interaction.values[0])} filter.`
+          )
+          .setColor(gColor);
+
+        interaction.reply({embeds: [embed], components: []});
       }
     }
 
+
     if (interaction.isCommand()) {
-      const command = client.commands.get(interaction.commandName);
+      const command = client.commands.get(interaction.commandName) || client.staffCommands.get(interaction.commandName) || client.adminCommands.get(interaction.commandName);
 
       if (!command) return;
 
       try {
-        await command.execute(interaction);
+        await command.execute(interaction, client);
       } catch (error) {
         console.error(error);
         await interaction.reply({
