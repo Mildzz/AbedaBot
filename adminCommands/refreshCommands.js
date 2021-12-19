@@ -35,11 +35,6 @@ module.exports = {
 
     interaction.reply({ embeds: [embed], fetchReply: true })
 
-    const completionEmbed = new MessageEmbed()
-      .setTitle("Guild Commands")
-      .setDescription('All guilds have been updated with the latest commands.')
-      .setColor(guildColor)
-
     const cmds = [];
     const commandFiles = fs
       .readdirSync(`./staffCommands/`)
@@ -89,8 +84,9 @@ module.exports = {
             await interaction.editReply({ content: `${bar.lastDraw}`, fetchReply: true})
 
             if (bar.complete) {
-              interaction.channel.send({ content: `<@${interaction.user.id}>`, embeds: [completionEmbed]})
-              await interaction.deleteReply()
+              interaction.channel.send({ content: `<@${interaction.user.id}>`}).then(m => {
+                m.delete();
+              })
             }
           }, 1500)
         })
