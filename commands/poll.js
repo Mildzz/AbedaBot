@@ -104,7 +104,9 @@ module.exports = {
         let usersVoted = [];
         collector.on('collect', async i => {
           /*** Chart Update yada yada yada ***/
-          if(multivote === null) if (usersVoted.includes(i.user.id)) return;
+          if(multivote !== true) {
+            if (usersVoted.includes(i.user.id)) return;
+          }
           reactions.splice(+i.customId, 1, reactions[+i.customId] += 1)
           const pollChart = `${initPollChart.url}?data1=${reactions.toString().replaceAll('"', "")}`
           const embed = new MessageEmbed()

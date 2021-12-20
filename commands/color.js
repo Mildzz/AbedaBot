@@ -2,6 +2,7 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const {
   MessageAttachment,
   MessageEmbed,
+  Permissions,
 } = require("discord.js");
 const Database = require("better-sqlite3");
 const db = new Database("guildconf.db");
@@ -57,6 +58,7 @@ module.exports = {
     const guildColor = getGuildColor(guildId);
 
     if (interaction.options.getSubcommand() === "set") {
+      if(!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) interaction.reply({ content: "You must have the manage server permission to do this.", ephemeral: true })
       if (re.test(clr)) {
         clr.includes("#")
           ? setGuildColor(clr, guildId, interaction)

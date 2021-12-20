@@ -54,6 +54,11 @@ module.exports = {
             label: "Image Filter",
             description: "Create an image only filter.",
             value: "image",
+          },
+          {
+            label: "Spam Filter",
+            description: "Create a spam filter.",
+            value: "spam",
           }
         ])
     );
@@ -62,7 +67,5 @@ module.exports = {
       .setDescription('Please choose an option below.')
       .setColor(guildColor)
     interaction.reply({embeds: [embed], components: [row]});
-
-    // const im = interaction.options.getBoolean("immunity");
   },
 };
