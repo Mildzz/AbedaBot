@@ -17,7 +17,7 @@ module.exports = {
     if (interaction.isSelectMenu()) {
       if (interaction.customId === "language") {
         const embed = new MessageEmbed()
-          .setTitle("Color Profile")
+          .setTitle("Guild Language")
           .setDescription(
             `You have set this guild's language to \`${interaction.values[0]}\``
           )
@@ -30,7 +30,7 @@ module.exports = {
         );
       } else if (interaction.customId === "filter") {
         const embed = new MessageEmbed()
-          .setTitle("Color Profile")
+          .setTitle("Filter")
           .setDescription(
             `You have successfully created ${a(interaction.values[0])} filter.`
           )

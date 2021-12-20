@@ -7,12 +7,6 @@ const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const ProgressBar = require("progress");
 
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("refreshcmds")
@@ -24,7 +18,7 @@ module.exports = {
     const bar = new ProgressBar('  Progress [:bar] :percent :etas', {
       complete: '='
       , incomplete: ' '
-      , width: 35
+      , width: 25
       , total: client.guilds.cache.size + 1
     });
     bar.tick();

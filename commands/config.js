@@ -19,6 +19,7 @@ module.exports = {
             .setName("channel")
             .setDescription("Your logs channel.")
             .setRequired(true)
+            .addChannelTypes([0])
         )
     )
     .addSubcommand((subcommand) =>
@@ -46,13 +47,14 @@ module.exports = {
     } else {
       if (interaction.options.getSubcommand() === "logs") {
         const logChannel = interaction.options.getChannel("channel");
+        if(logChannel.type !== "GUILD_TEXT") interaction.reply({ content: "Please select a text channel.", ephemeral: true })
         const logChannelId = logChannel
           .toString()
           .replace(/[^a-zA-Z0-9 ]/g, "");
         db.exec(
           `UPDATE guilds SET logChannelId = '${logChannelId}' WHERE guildId = '${guildId}'`
         );
-        const embed = new MessageEmbed()
+        let embed = new MessageEmbed()
           .setTitle(language.logChannel)
           .setDescription(
             `${language.logChannelDesc} ${logChannel}`

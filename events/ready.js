@@ -63,6 +63,15 @@ module.exports = {
       commands.push(command.data.toJSON());
     }
 
+    const rest = new REST({
+      version: "9",
+    }).setToken(process.env.TOKEN);
+
+    await rest.put(
+      Routes.applicationCommands(process.env.CLIENTID),
+      {body: commands}
+    );
+
     console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Global commands successfully registered.")
 
   },
