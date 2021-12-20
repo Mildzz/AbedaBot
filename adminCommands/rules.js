@@ -29,6 +29,7 @@ module.exports = {
     const verifyEmbed = new MessageEmbed()
       .setTitle("Verification")
       .setDescription("After you have read the rules, please verify below by clicking the <:AbedaCheck:886484165971816468>")
+      .setColor(guildColor)
     await interaction.client.guilds.cache.get("886114589102714890")?.rulesChannel.send({embeds: [ruleEmbed, verifyEmbed]});
     interaction.reply({ content: "Rules sent.", ephemeral: true })
   },
