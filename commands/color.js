@@ -58,7 +58,10 @@ module.exports = {
     const guildColor = getGuildColor(guildId);
 
     if (interaction.options.getSubcommand() === "set") {
-      if(!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) interaction.reply({ content: "You must have the manage server permission to do this.", ephemeral: true })
+      if(!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+        interaction.reply({ content: "You must have the manage server permission to do this.", ephemeral: true })
+        return;
+      }
       if (re.test(clr)) {
         clr.includes("#")
           ? setGuildColor(clr, guildId, interaction)

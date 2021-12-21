@@ -3,7 +3,8 @@ const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 const Database = require("better-sqlite3");
-const ms = require('ms')
+const db = new Database("guildconf.db");
+const ms = require('ms');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -28,71 +29,78 @@ module.exports = {
   async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
-    const Database = require("better-sqlite3");
-    const db = new Database("guildconf.db");
-    const staffRole = await db
-      .prepare(`SELECT StaffRole FROM guilds WHERE guildId = '${guildId}'`)
-      .pluck()
-      .get();
+    const staffRole = await db.prepare(`SELECT StaffRole FROM guilds WHERE guildId = '${guildId}'`).pluck().get();
 
     if (!staffRole) {
       interaction.reply({
         content: language.noStaffRole,
         ephemeral: true,
       });
-    } else {
+      return;
+    }
 
-      const guildColor = getGuildColor(guildId);
-      const user = interaction.options.getUser("user");
-      const time = interaction.options.getString('time');
-      const reason = interaction.options.getString("reason");
-      const logChannel = db
-        .prepare(`SELECT logChannelId FROM guilds WHERE guildId = '${guildId}'`)
-        .pluck()
-        .get();
+    const guildColor = getGuildColor(guildId);
+    const user = interaction.options.getUser("user");
+    const time = interaction.options.getString("time");
+    const reason = interaction.options.getString("reason");
+    const regex = new RegExp(/[0-9](y|mo|d|h|m|s)/);
+    if (regex.test(time) === false) {
+      interaction.reply({content: "Please provide a valid time (1s, 2m, 3h, 4d)", ephemeral: true})
+      return;
+    }
+
+    const logChannel = db.prepare(`SELECT logChannelId FROM guilds WHERE guildId = '${guildId}'`).pluck().get();
 
 
-      try {
-        await interaction.guild.members.cache
-          .get(user.id)
-          .timeout(ms(time), reason)
-      } catch (e) {
-        const errorEmbed = new MessageEmbed()
-          .setTitle("An error has occurred.")
-          .setDescription(`\`\`\`${e}\`\`\``)
-          .setColor(0xd84343);
-        interaction.reply({ embeds: [errorEmbed] });
-        return true;
-      }
-      const embed = new MessageEmbed()
+    try {
+      await interaction.guild.members.cache
+        .get(user.id)
+        .timeout(ms(time), reason)
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle("An error has occurred.")
+        .setDescription(`\`\`\`${e}\`\`\``)
+        .setColor(0xd84343);
+      interaction.reply({embeds: [errorEmbed]});
+      return true;
+    }
+    const embed = new MessageEmbed()
+      .setTitle("User Timed Out")
+      .setDescription(`Timed out ${user} ${language.for} \`${reason}\`.`)
+      .setColor(guildColor);
+    interaction.reply({embeds: [embed]});
+
+    if (logChannel) {
+      const logEmbed = new MessageEmbed()
         .setTitle("User Timed Out")
-        .setDescription(`Timed out ${user} ${language.for} \`${reason}\`.`)
+        .addFields(
+          {name: language.user, value: `${user}`, inline: true},
+          {name: language.reason, value: `${reason}`, inline: true},
+          {name: "Timed out by", value: `${interaction.user}`, inline: true},
+          {
+            name: language.when,
+            value: `<t:${Math.round(new Date().getTime() / 1000)}:R>`,
+            inline: true,
+          },
+          {name: "Duration", value: `${ms(ms(time), {long: true})}`}
+        )
         .setColor(guildColor);
-      interaction.reply({embeds: [embed]});
 
-      if (logChannel) {
-        const logEmbed = new MessageEmbed()
-          .setTitle("User Timed Out")
-          .addFields(
-            {name: language.user, value: `${user}`, inline: true},
-            {name: language.reason, value: `${reason}`, inline: true},
-            {name: "Timed out by", value: `${interaction.user}`, inline: true},
-            {
-              name: language.when,
-              value: `<t:${Math.round(new Date().getTime() / 1000)}:R>`,
-              inline: true,
-            },
-            {name: "Duration", value: `${time}`}
-          )
-          .setColor(guildColor);
-        interaction.guild.channels.cache
-          .get(logChannel)
-          ?.send({embeds: [logEmbed]});
-      } else {
-        interaction.channel.send(
-          language.noLogsChannel
-        );
-      }
+      const expireEmbed = new MessageEmbed()
+        .setTitle("User Time Out")
+        .setDescription(`${user}'s timeout has expired.`)
+        .setColor(guildColor);
+
+      setTimeout(() => {
+        interaction.guild.channels.cache.get(logChannel).send({embeds: [expireEmbed]})
+      }, ms(time));
+
+      interaction.guild.channels.cache.get(logChannel).send({embeds: [logEmbed]})
+
+    } else {
+      interaction.channel.send(
+        language.noLogsChannel
+      );
     }
   },
 };
