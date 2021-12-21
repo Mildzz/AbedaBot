@@ -87,7 +87,7 @@ module.exports = {
           .setColor(guildColor);
         interaction.guild.channels.cache
           .get(logChannel)
-          .send({embeds: [logEmbed]});
+          ?.send({embeds: [logEmbed]});
       } else {
         interaction.channel.send(
           language.noLogsChannel
