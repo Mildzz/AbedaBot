@@ -9,6 +9,6 @@ module.exports = {
       .setDescription(error)
       .setColor(0xd84343)
 
-    client.guilds.cache.get('886114589102714890').channels.cache.get('913578918156595211').send({embeds: [errorEmbed]})
+    client.guilds.cache.get('886114589102714890')?.channels.cache.get('913578918156595211').send({embeds: [errorEmbed]})
   },
 };

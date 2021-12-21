@@ -116,7 +116,7 @@ module.exports = {
           },
           {
             name: language.nickname,
-            value: `${member.nickname ?? "None"}`,
+            value: `${member.nickname ?? language.none}`,
             inline: true,
           },
           {

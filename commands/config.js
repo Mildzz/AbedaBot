@@ -93,6 +93,7 @@ module.exports = {
             const banId = cmds.find(({name}) => name === 'ban').commandId;
             const kickId = cmds.find(({name}) => name === 'kick').commandId;
             const clearId = cmds.find(({name}) => name === 'clear').commandId;
+            const timeoutId = cmds.find(({name}) => name === 'timeout').commandId;
 
             const fullPermissions = [
               {
@@ -113,6 +114,14 @@ module.exports = {
               },
               {
                 id: clearId,
+                permissions: [{
+                  id: staffRole,
+                  type: 'ROLE',
+                  permission: true,
+                }],
+              },
+              {
+                id: timeoutId,
                 permissions: [{
                   id: staffRole,
                   type: 'ROLE',
