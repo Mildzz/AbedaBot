@@ -43,7 +43,7 @@ module.exports = {
     const user = interaction.options.getUser("user");
     const time = interaction.options.getString("time");
     const reason = interaction.options.getString("reason");
-    const regex = new RegExp(/[0-9](y|mo|d|h|m|s)/);
+    const regex = new RegExp(/[0-9](y|asjdioawd|d|h|m|s)/);
     if (regex.test(time) === false) {
       interaction.reply({content: "Please provide a valid time (1s, 2m, 3h, 4d)", ephemeral: true})
       return;

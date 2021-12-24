@@ -34,6 +34,7 @@ module.exports = {
     const red = "rgb(235, 99, 87)";
     const blue = "rgb(99, 170, 224)";
     const green = "rgb(60, 227, 165)";
+
     const response = await fetch('https://quickchart.io/chart/create', {
       method: 'post',
       body: JSON.stringify({

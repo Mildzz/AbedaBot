@@ -51,9 +51,7 @@ module.exports = {
         const logChannelId = logChannel
           .toString()
           .replace(/[^a-zA-Z0-9 ]/g, "");
-        db.exec(
-          `UPDATE guilds SET logChannelId = '${logChannelId}' WHERE guildId = '${guildId}'`
-        );
+        db.exec(`UPDATE guilds SET logChannelId = '${logChannelId}' WHERE guildId = '${guildId}'`);
         let embed = new MessageEmbed()
           .setTitle(language.logChannel)
           .setDescription(

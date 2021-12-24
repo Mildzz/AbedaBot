@@ -44,9 +44,16 @@ module.exports = {
       await interaction.reply({embeds: [noCmdEmbed], components: [row]});
     } else {
       try {
-        const command = interaction.client.commands.get(cmd.toLowerCase()).data;
+        const command = interaction.client.commands.get(cmd.toLowerCase())?.data;
+        if(command === undefined) {
+          interaction.reply({
+            content: language.invalidCommands,
+            ephemeral: true,
+          });
+          return;
+        }
         const options = [];
-        command.options.forEach((e) => {
+        command?.options.forEach((e) => {
           options.push(capitalize(e.name));
         });
         const embed = new MessageEmbed()
@@ -54,16 +61,16 @@ module.exports = {
           .addFields(
             {
               name: language.help,
-              value: `${capitalize(command.name)} `,
+              value: `${capitalize(command?.name || "t")} `,
               inline: true,
             },
             {
               name: language.description,
-              value: `${command.description} `,
+              value: `${command?.description} `,
               inline: true,
             },
             {name: language.options, value: `${options.toString() || language.none} `, inline: true},
-            {name: language.defaultPerm, value: `${command.defaultPermission ?? language.yes}`, inline: true}
+            {name: language.defaultPerm, value: `${command?.defaultPermission ?? language.yes}`, inline: true}
           )
           .setColor(guildColor);
         interaction.reply({embeds: [embed]});

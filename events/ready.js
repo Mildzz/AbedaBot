@@ -51,6 +51,9 @@ module.exports = {
     db.exec(
       `CREATE TABLE IF NOT EXISTS reactionRoles (guildId varchar, messageId varchar, channelId varchar, role varchar, emoji varchar)`
     );
+    db.exec(
+      `CREATE TABLE IF NOT EXISTS stats (date varchar, guildId varchar, messageCount varchar)`
+    );
     console.log(`\x1b[31m%s\x1b[0m`, `[STATUS]`, "Connected to SQLite");
 
     const commands = [];
