@@ -4,8 +4,6 @@ const {
   MessageEmbed,
   Permissions,
 } = require("discord.js");
-const Database = require("better-sqlite3");
-const db = new Database("guildconf.db");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 const re = /[0-9A-Fa-f]{6}/g;
@@ -28,7 +26,7 @@ module.exports = {
     .addSubcommand((subcommand) =>
       subcommand.setName("get").setDescription("Get the server's color.")
     ),
-  async execute(interaction) {
+  async execute(interaction, db, client) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
 

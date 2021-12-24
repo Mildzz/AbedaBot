@@ -47,7 +47,7 @@ module.exports = {
       if (!command) return;
 
       try {
-        await command.execute(interaction, client);
+        await command.execute(interaction, db, client);
       } catch (error) {
         console.error(error);
         await interaction.reply({

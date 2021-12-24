@@ -4,6 +4,19 @@ const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
 
+// Functions
+async function banMember(interaction, member, reason, deleteMessages) {
+  if (deleteMessages === true) {
+    await interaction.guild.members.cache
+      .get(member.id)
+      .ban({days: deleteMessages, reason: reason});
+  } else {
+    await interaction.guild.members.cache
+      .get(member.id)
+      .ban({reason: reason});
+  }
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("ban")
@@ -16,6 +29,12 @@ module.exports = {
       option
         .setName("reason")
         .setDescription("Your reason for banning this member.")
+        .setRequired(true)
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName("delete-messages")
+        .setDescription("Do you want to delete this member's messages?")
         .setRequired(true)
     ),
   async execute(interaction) {
@@ -37,23 +56,22 @@ module.exports = {
       const guildColor = getGuildColor(guildId);
       const user = interaction.options.getUser("user");
       const reason = interaction.options.getString("reason");
+      const delMessages = interaction.options.getBoolean("delete-messages")
       const logChannel = db
         .prepare(`SELECT logChannelId FROM guilds WHERE guildId = '${guildId}'`)
         .pluck()
         .get();
 
-      // try {
-      //   await interaction.guild.members.cache
-      //     .get(user.id)
-      //     .ban({ days: 1, reason: reason });
-      // } catch (e) {
-      //   const errorEmbed = new MessageEmbed()
-      //     .setTitle("An error has occurred.")
-      //     .setDescription(`\`\`\`${e}\`\`\``)
-      //     .setColor(0xd84343);
-      //   interaction.reply({ embeds: [errorEmbed] });
-      //   return true;
-      // }
+      try {
+        await banMember(interaction, interaction.member, reason, delMessages)
+      } catch (e) {
+        const errorEmbed = new MessageEmbed()
+          .setTitle("An error has occurred.")
+          .setDescription(`\`\`\`${e}\`\`\``)
+          .setColor(0xd84343);
+        interaction.reply({ embeds: [errorEmbed] });
+        return true;
+      }
       const embed = new MessageEmbed()
         .setTitle(language.userBanned)
         .setDescription(`${language.banned} ${user} ${language.for} \`${reason}\`.`)

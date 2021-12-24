@@ -2,8 +2,6 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const {MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
-const Database = require("better-sqlite3");
-const db = new Database("guildconf.db");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -20,7 +18,8 @@ module.exports = {
       .setDescription("The emoji you want to use."))
     .addRoleOption((option) => option
       .setName("role")
-      .setDescription("The role you want to give")), async execute(interaction) {
+      .setDescription("The role you want to give")),
+  async execute(interaction, db) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(guildId);
@@ -54,11 +53,6 @@ module.exports = {
                 await m.react(emoji)
                 const reg = /<a?:([a-zA-Z0-9-_]{2,32}):(\d{18})>/
                 const emojiId = emoji.match(reg)[2]
-
-                /*** Fun Stuff ***/
-
-                const Database = require("better-sqlite3");
-                const db = new Database("guildconf.db");
 
                 // noinspection SyntaxError
                 const insert = db.prepare(

@@ -2,9 +2,7 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const {MessageEmbed, MessageActionRow, MessageSelectMenu} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
-const Database = require("better-sqlite3");
 require("fs");
-const db = new Database("guildconf.db");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -38,7 +36,7 @@ module.exports = {
         .setName("language")
         .setDescription("The language for your guild.")
     ),
-  async execute(interaction) {
+  async execute(interaction, db, client) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(interaction.guildId);

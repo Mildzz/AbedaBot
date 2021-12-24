@@ -17,16 +17,26 @@ const getDaysArray = function (start, end) {
 
 function change(a, b) {
   let percent;
-  if(b !== 0) {
-    if(a !== 0) {
+  if (b !== 0) {
+    if (a !== 0) {
       percent = (b - a) / a * 100;
     } else {
       percent = b * 100;
     }
   } else {
-    percent = - a * 100;
+    percent = -a * 100;
   }
   return Math.floor(percent);
+}
+
+async function getDbEntry(guildId, date, date2) {
+  if(date2) {
+    return await db
+      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date BETWEEN '${date}' AND '${date2}'`).all();
+  } else {
+    return await db
+      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date = '${date}'`).pluck().get()
+  }
 }
 
 // Variables
@@ -50,60 +60,62 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("stats")
     .setDescription("Shows your server statistics."),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const guildColor = getGuildColor(guildId);
 
-    const dbToday = await db
-      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date = '${today}'`).pluck().get();
-    let dbYesterday = await db
-      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date = '${yesterday}'`).pluck().get();
-    let dbSevenDaysAgo = await db
-      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date = '${sevenDaysAgo}'`).pluck().get();
-    let dbFourteenDaysAgo = await db
-      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date = '${fourteenDaysAgo}'`).pluck().get();
-    let dbPastWeek = await db
-      .prepare(`SELECT messageCount FROM stats WHERE guildId = '${guildId}' AND date BETWEEN '${sevenDaysAgo}' AND '${today}'`).all();
+    const dbToday = await getDbEntry(guildId, today)
+    let dbYesterday = await getDbEntry(guildId, yesterday)
+    let dbSevenDaysAgo = await getDbEntry(guildId, sevenDaysAgo)
+    let dbFourteenDaysAgo = await getDbEntry(guildId, fourteenDaysAgo)
+    let dbPastWeek = await getDbEntry(guildId, sevenDaysAgo, today)
 
     const messageCountArray = [];
 
-    // Make the array have 7 entries.
+    // Make the array have 8 entries.
 
     dbPastWeek.forEach(m => {
       messageCountArray.push(+m.messageCount)
     })
     for (let i = 0; i < 8; i++) {
-      if (messageCountArray.length === 8) { break; }
+      if (messageCountArray.length === 8) {
+        break;
+      }
       messageCountArray.push(NaN)
     }
 
     // Make sure values are not undefined
-    if(dbYesterday === undefined) dbYesterday = 1;
-    if(dbSevenDaysAgo === undefined) dbSevenDaysAgo = 1;
-    if(dbFourteenDaysAgo === undefined) dbFourteenDaysAgo = 1;
+    dbYesterday = dbYesterday ?? 0;
+    dbSevenDaysAgo = dbSevenDaysAgo ?? 0;
+    dbFourteenDaysAgo = dbFourteenDaysAgo ?? 0;
 
     // Emojis
 
     const upEmoji = "<:Up:923420513005621260>";
     const downEmoji = "<:Down:923420531116605510>";
     let emoji1, emoji2;
-    if(Math.sign(change(+dbYesterday, +dbToday)) === -1) emoji1 = downEmoji; else emoji1 = upEmoji;
-    if(Math.sign(change(+dbSevenDaysAgo, +dbToday)) === -1) emoji2 = downEmoji; else emoji2 = upEmoji;
+    (Math.sign(change(+dbYesterday, +dbToday)) === -1) ? emoji1 = downEmoji : emoji1 = upEmoji;
+    (Math.sign(change(+dbSevenDaysAgo, +dbToday)) === -1) ? emoji2 = downEmoji : emoji2 = upEmoji;
 
     // Create the graph
     const initArray = getDaysArray(new Date(sevenDaysAgo), new Date(today)).reverse();
-    const dateArray = initArray.map((v)=>v.toISOString().slice(0,10)).join(",");
+    const dateArray = initArray.map((v) => v.toISOString().slice(0, 10)).join(",");
 
     const embed = new MessageEmbed()
       .setTitle(`${interaction.guild.name} Statistics`)
-      .addField('Message Count Today', `${dbToday}`, true)
-      .addField('Message Count Yesterday', `${dbYesterday}`, true)
-      .addField('Message Count 7 Days Ago', `${dbSevenDaysAgo}`, true)
-      .addField('Message Count Change (24 hours)', `${emoji1} ${change(+dbYesterday, +dbToday)}%`, true)
-      .addField('Message Count Change (7 Days)', `${emoji2} ${change(+dbSevenDaysAgo, +dbToday)}%`, true)
+      .addFields(
+        {name: 'Message Count Today', value: `${dbToday}`, inline: true},
+        {name: 'Message Count Yesterday', value: `${dbYesterday}`, inline: true},
+        {name: 'Message Count 7 Days Ago', value: `${dbSevenDaysAgo}`, inline: true},
+        {name: 'Message Count Change (24 hours)', value: `${emoji1} ${change(+dbYesterday, +dbToday)}%`, inline: true},
+        {name: 'Message Count Change (7 Days)', value: `${emoji2} ${change(+dbSevenDaysAgo, +dbToday)}%`, inline: true}
+      )
       .setColor(guildColor)
       .setImage(`https://quickchart.io/chart/render/zm-58a99776-e2d2-4c99-a2d2-5d729fecbd57?labels=${dateArray}&data1=${messageCountArray}`);
 
-    +dbToday !== 0 ? await interaction.reply({ embeds: [embed] }) : interaction.reply({ content: "No data for today.", ephemeral: true })
+    +dbToday !== 0 ? await interaction.reply({embeds: [embed]}) : interaction.reply({
+      content: "No data for today.",
+      ephemeral: true
+    })
   },
 };

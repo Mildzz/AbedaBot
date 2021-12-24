@@ -2,8 +2,6 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const {MessageEmbed} = require("discord.js");
 const getGuildColor = require("../modules/getGuildColor");
 const getGuildLanguage = require("../modules/getGuildLanguage");
-const Database = require("better-sqlite3");
-const db = new Database("guildconf.db");
 const ms = require('ms');
 
 module.exports = {
@@ -26,7 +24,7 @@ module.exports = {
         .setDescription("Your reason for kicking this member.")
         .setRequired(true)
     ),
-  async execute(interaction) {
+  async execute(interaction, db, client) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const staffRole = await db.prepare(`SELECT StaffRole FROM guilds WHERE guildId = '${guildId}'`).pluck().get();
