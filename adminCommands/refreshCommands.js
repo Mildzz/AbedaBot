@@ -11,7 +11,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("refreshcmds")
     .setDescription("Refresh commands across all guilds."),
-  async execute(interaction, client) {
+  async execute(interaction, db, client) {
     if(interaction.user.id !== "366286884495818755") interaction.reply("no")
     const guildId = interaction.guildId;
     const guildColor = getGuildColor(guildId);

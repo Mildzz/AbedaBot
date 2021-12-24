@@ -5,7 +5,7 @@ const getGuildLanguage = require("../modules/getGuildLanguage");
 
 module.exports = {
   data: new SlashCommandBuilder().setName("rules").setDescription("test"),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const guildId = interaction.guildId;
     const language = require(`../languages/${getGuildLanguage(guildId)}`)
     const guildColor = getGuildColor(guildId);
