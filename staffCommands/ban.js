@@ -63,13 +63,14 @@ module.exports = {
         .get();
 
       try {
-        await banMember(interaction, interaction.member, reason, delMessages)
+        await banMember(interaction, user, reason, delMessages)
       } catch (e) {
         const errorEmbed = new MessageEmbed()
           .setTitle("An error has occurred.")
           .setDescription(`\`\`\`${e}\`\`\``)
           .setColor(0xd84343);
         interaction.reply({ embeds: [errorEmbed] });
+        console.log(e)
         return true;
       }
       const embed = new MessageEmbed()
