@@ -102,7 +102,7 @@ module.exports = {
       .addField('Message Count Change (24 hours)', `${emoji1} ${change(+dbYesterday, +dbToday)}%`, true)
       .addField('Message Count Change (7 Days)', `${emoji2} ${change(+dbSevenDaysAgo, +dbToday)}%`, true)
       .setColor(guildColor)
-      .setImage(`https://quickchart.io/chart/render/zm-58a99776-e2d2-4c99-a2d2-5d729fecbd57?labels=${dateArray}&data1=${messageCountArray}`)
+      .setImage(`https://quickchart.io/chart/render/zm-58a99776-e2d2-4c99-a2d2-5d729fecbd57?labels=${dateArray}&data1=${messageCountArray}`);
 
     +dbToday !== 0 ? await interaction.reply({ embeds: [embed] }) : interaction.reply({ content: "No data for today.", ephemeral: true })
   },
