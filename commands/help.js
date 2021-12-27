@@ -23,9 +23,9 @@ module.exports = {
     if (!cmd) {
       const noCmdEmbed = new MessageEmbed()
         .setTitle(`AbedaBot ${language.help}`)
-        .setDescription(
-          language.specCmd
-        )
+        .setDescription(`
+          ${language.specCmd} \`/help {COMMAND}\`
+        `)
         .setColor(guildColor);
 
       const row = new MessageActionRow().addComponents(
@@ -38,7 +38,11 @@ module.exports = {
         new MessageButton()
           .setLabel(language.commands)
           .setStyle("LINK")
-          .setURL("https://abeda.net/commands")
+          .setURL("https://abeda.net/commands"),
+        new MessageButton()
+          .setLabel("Guides")
+          .setStyle("LINK")
+          .setURL("https://docs.abeda.net")
       );
 
       await interaction.reply({embeds: [noCmdEmbed], components: [row]});
