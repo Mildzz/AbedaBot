@@ -35,6 +35,8 @@ module.exports = {
     const blue = "rgb(99, 170, 224)";
     const green = "rgb(60, 227, 165)";
 
+    if(optionsArray.length > 5) { interaction.reply({ content: "You cannot currently have more than 5 options. This will be fixed in the future!", ephemeral: true }); return; }
+
     const response = await fetch('https://quickchart.io/chart/create', {
       method: 'post',
       body: JSON.stringify({
